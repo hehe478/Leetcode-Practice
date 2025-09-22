@@ -28,6 +28,9 @@ public class MyArrayListTest {
         // 8. 测试异常情况
         testExceptions();
 
+        // 9. 测试排序功能
+        testSort();
+
         System.out.println("=== 所有测试完成 ===");
     }
 
@@ -172,6 +175,88 @@ public class MyArrayListTest {
             System.out.println("remove越界测试 - 失败 (未抛出异常)");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("remove越界测试 - 成功 (正确抛出异常)");
+        }
+    }
+
+    // 测试排序功能
+    private static void testSort() {
+        System.out.println("\n--- 测试排序功能 ---");
+
+        // 测试1: 对多个元素进行排序
+        MyArrayList<Integer> list1 = new MyArrayList<>();
+        list1.add(5);
+        list1.add(2);
+        list1.add(9);
+        list1.add(1);
+        list1.add(5);
+        list1.add(6);
+
+        System.out.print("排序前元素: ");
+        for (int i = 0; i < list1.size(); i++) {
+            System.out.print(list1.get(i) + " ");
+        }
+        System.out.println();
+
+        list1.sort();
+
+        System.out.print("排序后元素: ");
+        for (int i = 0; i < list1.size(); i++) {
+            System.out.print(list1.get(i) + " "); // 预期: 1 2 5 5 6 9
+        }
+        System.out.println();
+
+        // 测试2: 对空列表排序
+        MyArrayList<Integer> emptyList = new MyArrayList<>();
+        try {
+            emptyList.sort();
+            System.out.println("空列表排序测试 - 成功 (无异常)");
+        } catch (Exception e) {
+            System.out.println("空列表排序测试 - 失败 (抛出异常: " + e.getMessage() + ")");
+        }
+
+        // 测试3: 对单个元素排序
+        MyArrayList<Integer> singleElementList = new MyArrayList<>();
+        singleElementList.add(100);
+        singleElementList.sort();
+        System.out.println("单个元素排序后: " + singleElementList.get(0) + " (预期: 100)");
+
+        // 测试4: 对已排序的列表排序
+        MyArrayList<Integer> sortedList = new MyArrayList<>();
+        sortedList.add(1);
+        sortedList.add(2);
+        sortedList.add(3);
+        sortedList.add(4);
+        sortedList.sort();
+        System.out.print("已排序列表再次排序后: ");
+        for (int i = 0; i < sortedList.size(); i++) {
+            System.out.print(sortedList.get(i) + " "); // 预期: 1 2 3 4
+        }
+        System.out.println();
+
+        // 测试5: 对逆序列表排序
+        MyArrayList<Integer> reverseList = new MyArrayList<>();
+        reverseList.add(4);
+        reverseList.add(3);
+        reverseList.add(2);
+        reverseList.add(1);
+        reverseList.sort();
+        System.out.print("逆序列表排序后: ");
+        for (int i = 0; i < reverseList.size(); i++) {
+            System.out.print(reverseList.get(i) + " "); // 预期: 1 2 3 4
+        }
+        System.out.println();
+
+        // 测试6: 非Integer类型调用排序方法
+        MyArrayList<String> stringList = new MyArrayList<>();
+        stringList.add("Banana");
+        stringList.add("Apple");
+        try {
+            stringList.sort();
+            System.out.println("非Integer类型排序测试 - 失败 (未抛出异常)");
+        } catch (IllegalStateException e) {
+            System.out.println("非Integer类型排序测试 - 成功 (正确抛出异常)");
+        } catch (Exception e) {
+            System.out.println("非Integer类型排序测试 - 失败 (抛出非预期异常: " + e.getClass() + ")");
         }
     }
 }

@@ -82,4 +82,47 @@ public class MyArrayList<E> {
     public int size(){
         return size;
     }
+
+    public boolean isIntegerArray(){
+        for(int i = 0; i < size; i++){
+            E element = this.array[i];
+            if(element != null && !(element instanceof Integer)) return false;
+        }
+        return true;
+    }
+    public int[] toIntArray(){
+        if(!isIntegerArray()) throw new IllegalStateException("数组不是Integer类型，无法使用");
+        int[] intArray = new int[size];
+        for(int i = 0; i < size; i++){
+            intArray[i] = (Integer) array[i];
+        }
+        return intArray;
+    }
+    public void sort(){
+        int[] intArray = toIntArray();
+        quickSort(intArray,0,size - 1);
+    }
+    public void quickSort(int[] list, int left, int right){
+        if(left >= right) return;
+        int index = partition(list, left, right);
+        quickSort(list, left, index - 1);
+        quickSort(list, index + 1, right);
+    }
+    public int partition(int[] array ,int left,int right){
+        int pivotIndex = left;
+        left++;
+        int pivot = array[pivotIndex];
+        while(left < right){
+            while(left < right && array[left] > pivot) left++;
+            while(left < right && array[right] < pivot) right--;
+            swap(array,left,right);
+        }
+        swap(array, pivotIndex, right);
+        return right;
+    }
+    public void swap(int[] array, int left, int right){
+        array[left] = array[left] ^ array[right];
+        array[right] = array[left] ^ array[right];
+        array[left] = array[left] ^ array[right];
+    }
 }
