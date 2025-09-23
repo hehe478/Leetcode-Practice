@@ -100,29 +100,31 @@ public class MyArrayList<E> {
     }
     public void sort(){
         int[] intArray = toIntArray();
-        quickSort(intArray,0,size - 1);
+        int[] arraySorted = quickSort(intArray,0,size - 1);
+        for(int i = 0; i < size; i++) array[i] = (E) ((Integer) arraySorted[i]);
     }
-    public void quickSort(int[] list, int left, int right){
-        if(left >= right) return;
+    public int[] quickSort(int[] list, int left, int right){
+        if(left >= right) return list;
         int index = partition(list, left, right);
         quickSort(list, left, index - 1);
         quickSort(list, index + 1, right);
+        return list;
     }
     public int partition(int[] array ,int left,int right){
-        int pivotIndex = left;
-        left++;
-        int pivot = array[pivotIndex];
-        while(left < right){
-            while(left < right && array[left] > pivot) left++;
-            while(left < right && array[right] < pivot) right--;
-            swap(array,left,right);
+        int pivot = array[right];
+        int lessBound = left - 1;
+        for(int index = left; index < right; index++){
+            if(array[index] <= pivot) {
+                lessBound++;
+                swap(array, index, lessBound);
+            }
         }
-        swap(array, pivotIndex, right);
-        return right;
+        swap(array,++lessBound,right);
+        return lessBound;
     }
-    public void swap(int[] array, int left, int right){
-        array[left] = array[left] ^ array[right];
-        array[right] = array[left] ^ array[right];
-        array[left] = array[left] ^ array[right];
+    public void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
