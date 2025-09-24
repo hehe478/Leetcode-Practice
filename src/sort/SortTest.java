@@ -48,7 +48,9 @@ public class SortTest {
     public static void main(String[] args) {
         // 1. 将所有需要测试的排序算法实例放入一个列表
         List<sortable> sorters = List.of(
-                new BinaryInsertion()
+                new QuickSort(),
+                new BinaryInsertion(),
+                new DirectInsertion()
                 // new BubbleSort(),  // 在这里添加你其他的排序实现
                 // new QuickSort(),
                 // new MergeSort()
@@ -74,6 +76,9 @@ public class SortTest {
             runTest(s, case6_duplicates);
             runTest(s, case7_all_same);
             runTest(s, case8_with_negatives);
+            System.out.println("--- Testing ---");
+            s.sort(null);
+            System.out.println("passed");
         }
     }
 }

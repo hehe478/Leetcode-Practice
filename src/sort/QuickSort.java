@@ -1,16 +1,16 @@
 package sort;
 
 public class QuickSort implements sortable{
-    public void sort(int[] intArray){
-        int size = intArray.length;
-        int[] arraySorted = quickSort(intArray,0,size - 1);
+    public void sort(int[] array){
+        if(array == null || array.length <= 1) return;
+        int size = array.length;
+        quickSort(array,0,size - 1);
     }
-    public int[] quickSort(int[] list, int left, int right){
-        if(left >= right) return list;
+    public void quickSort(int[] list, int left, int right){
+        if(left >= right) return;
         int index = partition(list, left, right);
         quickSort(list, left, index - 1);
         quickSort(list, index + 1, right);
-        return list;
     }
     public int partition(int[] array ,int left,int right){
         int pivot = array[right];
