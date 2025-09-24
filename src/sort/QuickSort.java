@@ -1,6 +1,6 @@
 package sort;
 
-public class QuickSort {
+public class QuickSort implements sortable{
     public void sort(int[] intArray){
         int size = intArray.length;
         int[] arraySorted = quickSort(intArray,0,size - 1);
