@@ -1,5 +1,5 @@
 package sort;
 
-public interface sortable {
+public interface Sortable {
     void sort(int[] array);
 }

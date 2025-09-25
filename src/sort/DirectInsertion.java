@@ -1,6 +1,6 @@
 package sort;
 
-public class DirectInsertion extends InsertionSort implements sortable{
+public class DirectInsertion extends InsertionSort implements Sortable {
     public void sort(int[] array){
         if(array == null || array.length <= 1) return;
         int curValue;

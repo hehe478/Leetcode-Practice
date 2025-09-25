@@ -1,6 +1,6 @@
 package sort;
 
-public class BinaryInsertion extends InsertionSort implements sortable{
+public class BinaryInsertion extends InsertionSort implements Sortable {
     public void sort(int[] array){
         if(array == null || array.length <= 1) return;
         for(int curIndex = 1; curIndex < array.length; curIndex++){

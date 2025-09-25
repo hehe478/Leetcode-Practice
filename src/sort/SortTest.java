@@ -19,7 +19,7 @@ public class SortTest {
     }
 
     // 辅助方法：运行单个测试用例
-    public static void runTest(sortable sorter, int[] array) {
+    public static void runTest(Sortable sorter, int[] array) {
         // 为了不影响其他测试，我们复制一份原始数组进行排序
         int[] arrayToSort = Arrays.copyOf(array, array.length);
         String sorterName = sorter.getClass().getSimpleName();
@@ -47,7 +47,7 @@ public class SortTest {
 
     public static void main(String[] args) {
         // 1. 将所有需要测试的排序算法实例放入一个列表
-        List<sortable> sorters = List.of(
+        List<Sortable> sorters = List.of(
                 new QuickSort(),
                 new BinaryInsertion(),
                 new DirectInsertion()
@@ -67,7 +67,7 @@ public class SortTest {
         int[] case8_with_negatives = {-5, 10, 0, -2, 3, 10};
 
         // 3. 循环遍历每一个排序算法，并用所有测试用例去测试它
-        for (sortable s : sorters) {
+        for (Sortable s : sorters) {
             runTest(s, case1_random);
             runTest(s, case2_empty);
             runTest(s, case3_single);
