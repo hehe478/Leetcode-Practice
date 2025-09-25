@@ -6,9 +6,12 @@ public class DirectInsertion extends InsertionSort implements Sortable {
         int curValue;
         for(int curIndex = 1; curIndex < array.length; curIndex++){
             curValue = array[curIndex];
-            int searchIndex = 0;
-            while(curValue > array[searchIndex] && searchIndex < curIndex) searchIndex++;
-            insert(array,searchIndex,curIndex);
+            int temp = curValue;
+            while(curIndex > 0 && curValue < array[curIndex - 1]){
+                array[curIndex] = array[curIndex - 1];
+                curIndex--;
+            }
+            array[curIndex] = temp;
         }
     }
 }

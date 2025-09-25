@@ -50,7 +50,8 @@ public class SortTest {
         List<Sortable> sorters = List.of(
                 new QuickSort(),
                 new BinaryInsertion(),
-                new DirectInsertion()
+                new DirectInsertion(),
+                new ShellInsertion()
                 // new BubbleSort(),  // 在这里添加你其他的排序实现
                 // new QuickSort(),
                 // new MergeSort()
