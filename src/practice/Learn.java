@@ -42,5 +42,12 @@ public class Learn {
                 System.out.println(cur.val);
             }
         }
+        LearnListNode<Integer> newHead = new LearnListNode<>(0);
+        newHead.next = head;
+        head = newHead;
+        cur = head;
+        for(;cur != null ;cur = cur.next){
+            System.out.print(cur.val);
+        }
     }
 }
