@@ -1,5 +1,7 @@
 package practice;
 
+import java.util.NoSuchElementException;
+
 public class DoublyLinkedList<E> {
     final private Node<E> head, tail;
     private int size;
@@ -33,7 +35,10 @@ public class DoublyLinkedList<E> {
     }
     public void add(E e , int index){
         checkPositionIndex(index);
-        if(index == size)   { addLast(e); }
+        if(index == size){
+            addLast(e);
+            return;
+        }
         Node<E> newNode = new Node<>(e);
 
         Node<E> cur = getNode(index);
@@ -48,11 +53,12 @@ public class DoublyLinkedList<E> {
     }
 
     public E removeLast(){
+        checkIsEmpty();
         Node<E> toRemove = tail.pre;
         Node<E> preNode = toRemove.pre;
 
         preNode.next = tail;
-        tail.next = preNode;
+        tail.pre = preNode;
         toRemove.pre = null;
         toRemove.next = null;
 
@@ -80,6 +86,7 @@ public class DoublyLinkedList<E> {
     }
 
     public E getLast(){
+        checkIsEmpty();
         return tail.pre.val;
     }
 
@@ -91,6 +98,7 @@ public class DoublyLinkedList<E> {
     }
 
     public void setLast(E e){
+        checkIsEmpty();
         tail.pre.val = e;
     }
 
@@ -111,11 +119,27 @@ public class DoublyLinkedList<E> {
             throw new IndexOutOfBoundsException("index" + index + "size" + size);
         }
     }
+    private void checkIsEmpty(){
+        if(size == 0){
+            throw new NoSuchElementException("Operation cannot be performed on an empty list.");
+        }
+    }
     private Node<E> getNode(int index){
-        Node<E> cur = head;
-        for(int i = 0; i < index; i++){
-            cur = cur.next;
+        Node<E> cur;
+        if(index < (size / 2)){
+            cur = head.next;
+            for (int i = 0; i < index; i++) {
+                cur = cur.next;
+            }
+        }else{
+            cur = tail.pre;
+            for(int i = size - 1; i > index; i--){
+                cur = cur.pre;
+            }
         }
         return cur;
+    }
+    public int size(){
+        return size;
     }
 }
