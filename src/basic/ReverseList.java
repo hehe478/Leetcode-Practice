@@ -9,14 +9,12 @@ public class ReverseList {
         ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
     public ListNode reverseList(ListNode head){
-        ListNode current = head;
-        ListNode pre = null;
-        while(current != null){
-            ListNode nextNode = current.next;
-            current.next = pre;
-            pre = current;
-            current = nextNode;
+        if(head == null || head.next == null){
+            return head;
         }
-        return pre;
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
 }
