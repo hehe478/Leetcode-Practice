@@ -6,22 +6,10 @@ public class GetIntersectionNode {
         ListNode curA = headA;
         ListNode curB = headB;
 
-        for(int i = 0; i < 2; i++) {
-            while (curA != null && curB != null) {
-                curA = curA.next;
-                curB = curB.next;
-            }
-            if (curA == null) {
-                curA = headB;
-            } else {
-                curB = headA;
-            }
+        while(curB != curA){
+            curA = (curA != null) ? curA.next : headB;
+            curB = (curB != null) ? curB.next : headA;
         }
-        while(curA != null && curB != null){
-            if(curA == curB) return curA;
-            curA = curA.next;
-            curB = curB.next;
-        }
-        return null;
+        return curA;
     }
 }
