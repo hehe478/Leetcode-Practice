@@ -2,7 +2,7 @@ package basic;
 
 import basic.ReverseList.ListNode;
 
-public class HashCycle {
+public class HasCycle {
     public boolean hasCycle(ListNode head){
         ListNode fast = head;
         ListNode slow = head;
