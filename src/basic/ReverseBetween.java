@@ -8,16 +8,15 @@ public class ReverseBetween {
         ListNode dummy = new ListNode(-1,head);
         ListNode pre = dummy;
         for(int i = 0; i < left - 1; i++) pre = pre.next;
-        ListNode rightNode = pre;
-        for(int j = 0; j < right - left + 1; j++) rightNode = rightNode.next;
+        ListNode cur = pre.next;
 
-        ListNode leftNode = pre.next;
-        ListNode successor = rightNode.next;
-        rightNode.next = null;
-        pre.next = null;
+        for(int j = 0; j < right - left; j++){
+            ListNode nextNode = cur.next;
 
-        pre.next = reverseList(leftNode);
-        leftNode.next = successor;
+            cur.next = nextNode.next;
+            nextNode.next = pre.next;
+            pre.next = nextNode;
+        }
         return dummy.next;
     }
 }
