@@ -10,7 +10,7 @@ public class BinarySearchTree <E extends Comparable<E>> extends LinkedBinaryTree
         size++;
     }
 
-    private TreeNode<E> insertRecursive(TreeNode<E> node, E element){
+    protected TreeNode<E> insertRecursive(TreeNode<E> node, E element){
         if(node == null) return new TreeNode<>(element);
         int compareResult = element.compareTo(node.data);
         if(compareResult < 0) node.left = insertRecursive(node.left,element);
