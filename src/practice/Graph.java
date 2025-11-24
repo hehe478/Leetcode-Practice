@@ -1,8 +1,6 @@
 package practice;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Graph {
     public static class Edge{
@@ -86,6 +84,82 @@ public class Graph {
         }
     }
 
+    public void topologicalSort(){
+        int[] inDegree = new int[V];
+        for(int u = 0; u < V; u++){
+            for(Edge edge : adjacencyList.get(u)){
+                inDegree[edge.to]++;
+            }
+        }
+
+        LinkedList<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < V; i++){
+            if(inDegree[i] == 0) queue.offer(i);
+        }
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        while(!queue.isEmpty()){
+            int u = queue.poll();
+            result.add(u);
+            for(Edge edge : adjacencyList.get(u)){
+                int v = edge.to;
+                inDegree[v]--;
+                if(inDegree[v] == 0){
+                    queue.offer(v);
+                }
+            }
+        }
+        if(result.size() == V){
+            System.out.print("不存在环");
+        }else{
+            System.out.print("存在环");
+        }
+    }
+
+    public void dijkstra(int start){
+        int[] dist = new int[V];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        class State implements Comparable<State>{
+            int id;
+            int distFromStart;
+
+            public State(int id, int distFromStart){
+                this.id = id;
+                this.distFromStart = distFromStart;
+            }
+
+            public int compareTo(State other){
+                return this.distFromStart - other.distFromStart;
+            }
+        }
+        PriorityQueue<State> pq = new PriorityQueue<>();
+        pq.offer(new State(start,0));
+
+        boolean[] visited = new boolean[V];
+        while(!pq.isEmpty()){
+            State currState = pq.poll();
+            int u = currState.id;
+            if(visited[u]) continue;
+            visited[u] = true;
+
+            for(Edge edge : adjacencyList.get(u)){
+                int v = edge.to;
+                if(dist[v] > dist[u] + edge.weight){
+                    dist[v] = dist[u] + edge.weight;
+                    pq.offer(new State(v,dist[v]));
+                }
+            }
+        }
+        System.out.println("Dijkstra Shortest Path from Node " + start + ":");
+        for (int i = 0; i < V; i++) {
+            System.out.println("To Node " + i + " -> " +
+                    (dist[i] == Integer.MAX_VALUE ? "Unreachable" : dist[i]));
+        }
+    }
+
     public static void main(String[] args) {
         Graph g = new Graph(5);
 
@@ -107,5 +181,32 @@ public class Graph {
         // 预期 DFS (从0开始): 0 -> 1 -> 3 -> 2 -> 4 (这只是一种可能，取决于邻接表的顺序)
         // 解释: 0走到1，1走到3，3走到2，2走到4... 一条龙走到底
         g.dfs(0);
+
+        Graph g1 = new Graph(6);
+
+        // 注意：这里一定要设为 true (有向图)
+        // addEdge(from, to, weight, directed)
+
+        g1.addEdge(0, 1, 1, true); // 内裤 -> 裤子
+        g1.addEdge(1, 3, 1, true); // 裤子 -> 鞋子
+        g1.addEdge(2, 3, 1, true); // 袜子 -> 鞋子
+        g1.addEdge(4, 5, 1, true); // 衬衫 -> 外套
+
+        // 袜子(2)和衬衫(4)没有依赖，内裤(0)也没有依赖
+
+        System.out.println("Running Topological Sort:");
+        g1.topologicalSort();
+
+        Graph g2 = new Graph(4);
+
+        // 注意：这里是有向图 (directed = true)
+        g2.addEdge(0, 1, 10, true);
+        g2.addEdge(0, 2, 20, true);
+        g2.addEdge(1, 3, 50, true); // 1到3 很远
+        g2.addEdge(2, 1, 10, true); // 2还能绕回1
+        g2.addEdge(2, 3, 5, true);  // 2到3 很近
+
+        System.out.println("\nRunning Dijkstra...");
+        g2.dijkstra(0);
     }
 }
