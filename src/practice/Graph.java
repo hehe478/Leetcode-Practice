@@ -123,8 +123,8 @@ public class Graph {
         dist[start] = 0;
 
         class State implements Comparable<State>{
-            int id;
-            int distFromStart;
+            final int id;
+            final int distFromStart;
 
             public State(int id, int distFromStart){
                 this.id = id;
@@ -159,6 +159,111 @@ public class Graph {
                     (dist[i] == Integer.MAX_VALUE ? "Unreachable" : dist[i]));
         }
     }
+
+    public void spfa(int start){
+        int[] dist = new int[V];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        dist[start] = 0;
+
+        LinkedList<Integer> queue = new LinkedList<>();
+        queue.offer(start);
+        boolean[] inQueue = new boolean[V];
+        inQueue[start] = true;
+
+        int[] updateCount = new int[V];
+        while(!queue.isEmpty()){
+            int u = queue.poll();
+            inQueue[u] = false;
+
+            for(Edge edge : adjacencyList.get(u)){
+                int v = edge.to;
+                int weight = edge.weight;
+                if(v != Integer.MAX_VALUE && dist[v] > dist[u] + weight){
+                    dist[v] = dist[u] + weight;
+                    if(!inQueue[v]){
+                        queue.offer(v);
+                        inQueue[v] = true;
+                        updateCount[v]++;
+
+                        if(updateCount[v] > V){
+                            System.out.println("存在负权环");
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static class MinUnionFind{
+        int[] parent;
+
+        public MinUnionFind(int n){
+            parent = new int[n];
+            for(int i = 0; i < n; i++){
+                parent[i] = i;
+            }
+        }
+
+        public int find(int p){
+            if(parent[p] != p) parent[p] = find(parent[p]);
+            return parent[p];
+        }
+
+        public boolean union(int p, int q){
+            int rootP = find(p);
+            int rootQ = find(q);
+
+            if(rootP == rootQ) return false;
+            parent[rootP] = rootQ;
+            return true;
+        }
+    }
+
+    static class FullEdge implements Comparable<FullEdge>{
+        int u, v, weight;
+        public FullEdge(int u, int v, int weight){
+            this.u = u;
+            this.v = v;
+            this.weight = weight;
+        }
+
+        public int compareTo(FullEdge other){
+            return this.weight - other.weight;
+        }
+        public String toString(){
+            return"[" + u + "-" + v + "weight: " + weight + "]";
+        }
+    }
+    public void kruskalMST(){
+        ArrayList<FullEdge> allEdges = new ArrayList<>();
+        for(int i = 0; i < V; i++){
+            for(Edge edge : adjacencyList.get(i)){
+                if(i < edge.to){
+                    allEdges.add(new FullEdge(i,edge.to,edge.weight));
+                }
+            }
+        }
+
+        MinUnionFind uf = new MinUnionFind(V);
+        Collections.sort(allEdges);
+        ArrayList<FullEdge> mstEdges = new ArrayList<>();
+        int totalCost = 0;
+
+        for(FullEdge edge : allEdges){
+            if(uf.union(edge.u,edge.v)){
+                mstEdges.add(edge);
+                totalCost += edge.weight;
+            }
+        }
+
+        System.out.println("Kruskal MST Result:");
+        for (FullEdge e : mstEdges) {
+            System.out.println(e);
+        }
+        System.out.println("Total Cost: " + totalCost);
+    }
+
 
     public static void main(String[] args) {
         Graph g = new Graph(5);
@@ -208,5 +313,26 @@ public class Graph {
 
         System.out.println("\nRunning Dijkstra...");
         g2.dijkstra(0);
+
+        Graph g3 = new Graph(4);
+
+        // 构建一个带点冗余路线的图
+        g3.addEdge(0, 1, 10, false);
+        g3.addEdge(0, 2, 6, false);
+        g3.addEdge(0, 3, 5, false);
+        g3.addEdge(1, 3, 15, false);
+        g3.addEdge(2, 3, 4, false);
+
+        // 预期分析：
+        // 边排序：
+        // 2-3 (4) -> 选
+        // 0-3 (5) -> 选
+        // 0-2 (6) -> 0和2已经通过3连通了(0-3-2)，丢弃！
+        // 0-1 (10) -> 选
+        // 1-3 (15) -> 丢弃
+
+        // 总花费应该 = 4 + 5 + 10 = 19
+
+        g3.kruskalMST();
     }
 }
