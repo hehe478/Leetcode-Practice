@@ -25,8 +25,8 @@ public class UnionFind {
         int rootJ = find(j);
 
         if(rootI == rootJ) return;
-        if(rank[i] > rank[j]) parent[rootJ] = rootI;
-        else if (rank[j] > rank[i]) parent[rootI] = rootJ;
+        if(rank[rootI] > rank[rootJ]) parent[rootJ] = rootI;
+        else if (rank[rootJ] > rank[rootI]) parent[rootI] = rootJ;
         else {
             parent[rootI] = rootJ;
             rank[rootJ]++;

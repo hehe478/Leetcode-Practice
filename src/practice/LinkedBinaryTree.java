@@ -1,7 +1,8 @@
 package practice;
 
-public abstract class LinkedBinaryTree<E> {
-    protected TreeNode<E> root;
+
+public abstract class LinkedBinaryTree<E, N extends TreeNode<E>> {
+    protected N root;
     protected int size;
 
     public LinkedBinaryTree(){
@@ -23,11 +24,11 @@ public abstract class LinkedBinaryTree<E> {
         System.out.println();
     }
 
-    public void preOrderRecursive(TreeNode<E> node){
+    public void preOrderRecursive(N node){
         if(node == null) return;
         System.out.print(node.data + "  ");
-        preOrderRecursive(node.left);
-        preOrderRecursive(node.right);
+        preOrderRecursive(cast(node.left));
+        preOrderRecursive(cast(node.right));
     }
 
     public void inOrder() {
@@ -36,13 +37,13 @@ public abstract class LinkedBinaryTree<E> {
         System.out.println();
     }
 
-    private void inOrderRecursive(TreeNode<E> node) {
+    private void inOrderRecursive(N node) {
         if (node == null) {
             return;
         }
-        inOrderRecursive(node.left);
+        inOrderRecursive(cast(node.left));
         System.out.print(node.data + "  ");
-        inOrderRecursive(node.right);
+        inOrderRecursive(cast(node.right));
     }
 
     public void postOrder() {
@@ -51,10 +52,15 @@ public abstract class LinkedBinaryTree<E> {
         System.out.println();
     }
 
-    public void postOrderRecursive(TreeNode<E> node){
+    public void postOrderRecursive(N node){
         if(node == null) return;
-        postOrderRecursive(node.left);
-        postOrderRecursive(node.right);
+        postOrderRecursive(cast(node.left));
+        postOrderRecursive(cast(node.right));
         System.out.print(node.data + "  ");
+    }
+
+    @SuppressWarnings("unchecked")
+    public N cast(TreeNode<E> node){
+        return (N)node;
     }
 }

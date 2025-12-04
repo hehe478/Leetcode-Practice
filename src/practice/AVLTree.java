@@ -1,26 +1,31 @@
 package practice;
 
-public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E> {
+public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E, AVLTreeNode<E>> {
     public AVLTree(){
         super();
     }
 
-    private int getHeight(TreeNode<E> node){
+    @Override
+    protected AVLTreeNode<E> createNode(E data) {
+        return new AVLTreeNode<>(data);
+    }
+
+    private int getHeight(AVLTreeNode<E> node){
         return node == null ? 0 : node.height;
     }
 
-    private int getBalanceFactor(TreeNode<E> node){
+    private int getBalanceFactor(AVLTreeNode<E> node){
         if(node == null) return 0;
-        return getHeight(node.left) - getHeight(node.right);
+        return getHeight(cast(node.left)) - getHeight(cast(node.right));
     }
 
-    private void updateHeight(TreeNode<E> node){
-        node.height = Math.max(getHeight(node.left),getHeight((node.right))) + 1;
+    private void updateHeight(AVLTreeNode<E> node){
+        node.height = Math.max(getHeight(cast(node.left)),getHeight(cast(node.right))) + 1;
     }
 
-    private TreeNode<E> rightRotate(TreeNode<E> root){
-        TreeNode<E> newRoot = root.left;
-        TreeNode<E> T2 = newRoot.right;
+    private AVLTreeNode<E> rightRotate(AVLTreeNode<E> root){
+        AVLTreeNode<E> newRoot = cast(root.left);
+        AVLTreeNode<E> T2 = cast(newRoot.right);
 
         newRoot.right = root;
         root.left = T2;
@@ -31,9 +36,9 @@ public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E> {
         return newRoot;
     }
 
-    private TreeNode<E> leftRotate(TreeNode<E> root){
-        TreeNode<E> newRoot = root.right;
-        TreeNode<E> T3 = newRoot.left;
+    private AVLTreeNode<E> leftRotate(AVLTreeNode<E> root){
+        AVLTreeNode<E> newRoot = cast(root.right);
+        AVLTreeNode<E> T3 = cast(newRoot.left);
 
         newRoot.left = root;
         root.right = T3;
@@ -44,17 +49,17 @@ public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E> {
         return newRoot;
     }
 
-    private TreeNode<E> balance(TreeNode<E> node){
+    private AVLTreeNode<E> balance(AVLTreeNode<E> node){
         int balanceFactor = getBalanceFactor(node);
         if(balanceFactor > 1){
-            if(getBalanceFactor(node.left) < 0){
-                node.left = leftRotate(node.left);
+            if(getBalanceFactor(cast(node.left)) < 0){
+                node.left = leftRotate(cast(node.left));
             }
             return rightRotate(node);
         }
         if(balanceFactor < -1){
-            if(getBalanceFactor(node.right) > 0){
-                node.right = rightRotate(node.right);
+            if(getBalanceFactor(cast(node.right)) > 0){
+                node.right = rightRotate(cast(node.right));
             }
             return leftRotate(node);
         }
@@ -62,20 +67,17 @@ public class AVLTree<E extends Comparable<E>> extends BinarySearchTree<E> {
     }
 
     @Override
-    protected TreeNode<E> insertRecursive(TreeNode<E> node,E element){
-        if(node == null) return new TreeNode<>(element);
-
-        int compareResult = element.compareTo(node.data);
-        if(compareResult < 0) node.left = insertRecursive(node.left,element);
-        else if(compareResult > 0) node.right = insertRecursive(node.right,element);
-        else {
-            size--;
-            return node;
-        }
-
+    protected AVLTreeNode<E> afterInsert(AVLTreeNode<E> node){
         updateHeight(node);
         return balance(node);
     }
+
+    @Override
+    protected AVLTreeNode<E> afterDelete(AVLTreeNode<E> node){
+        updateHeight(node);
+        return balance(node);
+    }
+
     public static void main(String[] args) {
         AVLTree<Integer> avl = new AVLTree<>();
 
